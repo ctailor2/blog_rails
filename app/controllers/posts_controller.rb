@@ -4,11 +4,17 @@ class PostsController < ApplicationController
 	end
 
 	def new
+		@post = Post.new
 	end
 
 	def create
-		@post = Post.create(params[:post])
-		redirect_to @post
+		@post = Post.new(params[:post])
+
+		if @post.save
+			redirect_to @post
+		else
+			render 'new'
+		end
 	end
 
 	def show
@@ -21,8 +27,11 @@ class PostsController < ApplicationController
 
 	def update
 		@post = Post.find(params[:id])
-		@post.update_attributes(params[:post])
-		redirect_to posts_path
+		if @post.update_attributes(params[:post])
+			redirect_to posts_path
+		else
+			render 'edit'
+		end
 	end
 
 	def destroy
