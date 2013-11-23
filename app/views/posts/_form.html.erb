@@ -17,6 +17,8 @@
 		<%= f.label :body %><br>
 		<%= f.text_area :body %>
 	</p>
+	<p>Tags</p>
+	<%= render :partial => 'taggings/form' %>
 	<p>
 		<%= f.submit %>
 	</p>
