@@ -30,7 +30,11 @@ class PostsController < ApplicationController
 	end
 
 	def update
+		tag_names = params[:post].extract!(:tag_names)
 		@post = Post.find(params[:id])
+		@post.taggings.destroy_all
+		@post.tag_names = tag_names[:tag_names]
+
 		if @post.update_attributes(params[:post])
 			redirect_to posts_path
 		else
