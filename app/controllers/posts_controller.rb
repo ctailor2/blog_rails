@@ -10,9 +10,11 @@ class PostsController < ApplicationController
 	end
 
 	def create
+		tag_names = params[:post].extract!(:tag_names)
 		@post = Post.new(params[:post])
+		@post.tag_names = tag_names[:tag_names]
 
-		if @post.save
+		if @post.save!
 			redirect_to @post
 		else
 			render 'new'
