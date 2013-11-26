@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-	http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+	# http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
 
 	def index
 		@posts = Post.all
@@ -10,9 +10,11 @@ class PostsController < ApplicationController
 	end
 
 	def create
+		tag_names = params[:post].extract!(:tag_names)
 		@post = Post.new(params[:post])
+		@post.tag_names = tag_names[:tag_names]
 
-		if @post.save
+		if @post.save!
 			redirect_to @post
 		else
 			render 'new'
@@ -28,7 +30,11 @@ class PostsController < ApplicationController
 	end
 
 	def update
+		tag_names = params[:post].extract!(:tag_names)
 		@post = Post.find(params[:id])
+		@post.taggings.destroy_all
+		@post.tag_names = tag_names[:tag_names]
+
 		if @post.update_attributes(params[:post])
 			redirect_to posts_path
 		else
